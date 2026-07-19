@@ -28,7 +28,6 @@
       ]
     },
     "allowJs": true,
-    "noEmit": true,
     "incremental": true,
     "moduleResolution": "node",
     "isolatedModules": true,
