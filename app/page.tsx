@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { parseCSV, downloadCSV, validateCSVFile, CSVError } from '@/lib/csv'
 import { useMessageStorage } from '@/lib/storage'
-import { validateReview, MAX_CHARS } from '@/lib/validation'
+import { validateReview } from '@/lib/validation'
 
 interface Message {
   id: string
