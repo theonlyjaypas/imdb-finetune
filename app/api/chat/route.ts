@@ -16,24 +16,42 @@ interface ChatResponse {
 }
 
 async function classifySentiment(text: string): Promise<SentimentResponse> {
+  const hfToken = process.env.HF_TOKEN
+  if (!hfToken) {
+    throw new Error('HF_TOKEN environment variable is not set')
+  }
+
   try {
-    const response = await fetch('http://localhost:8080/predict', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text }),
-    })
+    const response = await fetch(
+      'https://api-inference.huggingface.co/models/jayanthnagasai/imdb-qlora',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${hfToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ inputs: text }),
+      }
+    )
 
     if (!response.ok) {
-      throw new Error(`Backend returned ${response.status}`)
+      throw new Error(`HuggingFace API returned ${response.status}`)
     }
 
     const data = await response.json()
+    const predictions = Array.isArray(data) ? data[0] : data
+
+    if (!predictions || !predictions.length) {
+      throw new Error('No predictions returned from model')
+    }
+
+    const topPrediction = predictions[0]
     return {
-      label: data.label,
-      confidence: data.confidence,
+      label: topPrediction.label,
+      confidence: topPrediction.score,
     }
   } catch (error) {
-    console.error('Failed to call sentiment model backend:', error)
+    console.error('Failed to call sentiment model:', error)
     throw error
   }
 }
