@@ -142,7 +142,7 @@ def predict(req: ReviewRequest):
 
 
 class BatchReviewRequest(BaseModel):
-    reviews: list[str] = Field(..., min_items=1)
+    reviews: list[str] = Field(..., min_length=1)
 
 
 class BatchSentimentResponse(BaseModel):

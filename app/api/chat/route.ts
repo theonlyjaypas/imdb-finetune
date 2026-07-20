@@ -16,52 +16,37 @@ interface ChatResponse {
 }
 
 async function classifySentiment(text: string): Promise<SentimentResponse> {
-  const hfToken = process.env.HF_TOKEN
-  console.log('HF_TOKEN set:', !!hfToken)
-
-  if (!hfToken) {
-    throw new Error('HF_TOKEN environment variable is not set')
+  const modelUrl = process.env.MODEL_API_URL
+  if (!modelUrl) {
+    throw new Error('MODEL_API_URL environment variable is not set')
   }
 
   try {
-    console.log('Calling HuggingFace API with text:', text.substring(0, 50) + '...')
+    console.log('Calling model API at:', modelUrl)
 
-    const response = await fetch(
-      'https://api-inference.huggingface.co/models/jayanthnagasai/imdb-qlora',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${hfToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ inputs: text }),
-      }
-    )
+    const response = await fetch(`${modelUrl}/predict`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    })
 
-    console.log('HuggingFace API response status:', response.status)
+    console.log('Model API response status:', response.status)
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('HuggingFace API error:', errorText)
-      throw new Error(`HuggingFace API returned ${response.status}: ${errorText}`)
+      console.error('Model API error:', errorText)
+      throw new Error(`Model API returned ${response.status}: ${errorText}`)
     }
 
     const data = await response.json()
-    console.log('HuggingFace API response data:', JSON.stringify(data).substring(0, 200))
+    console.log('Model API response:', data)
 
-    const predictions = Array.isArray(data) ? data[0] : data
-
-    if (!predictions || !predictions.length) {
-      throw new Error('No predictions returned from model')
-    }
-
-    const topPrediction = predictions[0]
     return {
-      label: topPrediction.label,
-      confidence: topPrediction.score,
+      label: data.label,
+      confidence: data.confidence,
     }
   } catch (error) {
-    console.error('Failed to call sentiment model:', error)
+    console.error('Failed to call model API:', error)
     throw error
   }
 }
