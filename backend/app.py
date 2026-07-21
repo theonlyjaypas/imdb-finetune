@@ -50,11 +50,11 @@ def load_model_and_tokenizer():
     which one it is instead of assuming, so this works either way.
     """
     if DEVICE == "cuda":
-        load_kwargs = dict(dtype=torch.float16, device_map="auto")
+        load_kwargs = dict(torch_dtype=torch.float16, device_map="auto")
     elif DEVICE == "mps":
-        load_kwargs = dict(dtype=torch.float16)
+        load_kwargs = dict(torch_dtype=torch.float16)
     else:
-        load_kwargs = dict(dtype=torch.float32)
+        load_kwargs = dict(torch_dtype=torch.float32)
 
     try:
         tok = AutoTokenizer.from_pretrained(ADAPTER_MODEL, trust_remote_code=True, token=HF_TOKEN)
