@@ -71,7 +71,8 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json(response)
   } catch (error) {
-    console.error('Chat API error:', error)
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    console.error('Chat API error:', errorMsg)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

@@ -137,8 +137,16 @@ def health():
 
 @app.post("/predict", response_model=SentimentResponse)
 def predict(req: ReviewRequest):
-    result = classify_review(req.text)
-    return SentimentResponse(**result)
+    try:
+        print(f"Received request: {req.text[:100]}...")
+        result = classify_review(req.text)
+        print(f"Classification result: {result}")
+        return SentimentResponse(**result)
+    except Exception as e:
+        print(f"Error in predict: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
 
 
 class BatchReviewRequest(BaseModel):

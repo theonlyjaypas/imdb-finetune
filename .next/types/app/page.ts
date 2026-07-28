@@ -1,4 +1,4 @@
-// File: /Users/jaypas/MLENG/MINI/imdb-finetune/app/page.tsx
+// File: /Users/jaypas/MLENG/MINI/git/imdb-finetune/app/page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
