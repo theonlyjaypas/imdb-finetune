@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2013-12-31
+Description: IMDB Sentiment Classifier Lambda with SAM
+
+Globals:
+  Function:
+    Timeout: 900
+    MemorySize: 3008
+    Architectures:
+      - x86_64
+
+Resources:
+  IMDBSentimentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: imdb-sentiment-classifier
+      PackageType: Image
+      Environment:
+        Variables:
+          HF_TOKEN: '{{resolve:secretsmanager:imdb/huggingface-token:SecretString:}}'
+    Metadata:
+      DockerContext: .
+      Dockerfile: lambda/Dockerfile
+
+Outputs:
+  FunctionArn:
+    Description: Lambda Function ARN
+    Value: !GetAtt IMDBSentimentFunction.Arn
+  FunctionName:
+    Description: Lambda Function Name
+    Value: !Ref IMDBSentimentFunction
