@@ -3,13 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-<<<<<<< HEAD
-    "dev": "concurrently \"next dev\" \"python backend/app.py\"",
-=======
     "dev": "concurrently \"python backend/app.py\" \"next dev\"",
     "dev:frontend": "next dev",
     "dev:backend": "python backend/app.py",
->>>>>>> origin/main
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -24,11 +20,7 @@
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "autoprefixer": "^10.5.4",
-<<<<<<< HEAD
     "concurrently": "^10.0.3",
-=======
-    "concurrently": "^8.2.2",
->>>>>>> origin/main
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.35",
     "postcss": "^8.5.19",
